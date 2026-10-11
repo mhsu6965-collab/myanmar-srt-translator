@@ -1,190 +1,170 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="my">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Myanmar SRT Translator</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; padding: 20px;
-      font-family: system-ui, sans-serif;
-      background: #f4f6fb; color: #202637;
-    }
-    main { max-width: 850px; margin: auto; }
-    h1 { font-size: 25px; margin-bottom: 6px; }
-    .muted { color: #687386; font-size: 14px; }
-    .panel {
-      background: white; border-radius: 16px;
-      padding: 18px; margin-top: 18px;
-      box-shadow: 0 3px 15px #15294a0c;
-    }
-    label { display: block; font-weight: 600; margin-bottom: 8px; }
-    input, textarea, button {
-      width: 100%; font: inherit; border-radius: 9px;
-    }
-    input, textarea {
-      border: 1px solid #ccd3df; padding: 12px;
-      background: white; color: inherit;
-    }
-    textarea { min-height: 300px; resize: vertical; line-height: 1.65; }
-    button {
-      border: 0; padding: 13px; margin-top: 12px;
-      background: #3759db; color: white;
-      font-weight: 700; cursor: pointer;
-    }
-    button:disabled { opacity: .55; cursor: wait; }
-    button.secondary { background: #e8edff; color: #2845b6; }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    #status { white-space: pre-wrap; font-size: 14px; margin-top: 12px; }
-    .good { color: #167044; }
-    .bad { color: #b42318; }
-    @media(max-width: 540px) {
-      body { padding: 12px; }
-      .row { grid-template-columns: 1fr; }
-      .panel { padding: 14px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Myanmar SRT Translator</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Noto Sans Myanmar",sans-serif;color:#172033;background:#f4f6fb}
+*{box-sizing:border-box}body{margin:0;padding:20px}.wrap{max-width:850px;margin:auto}
+header{margin:8px 0 20px}h1{font-size:clamp(24px,5vw,34px);margin:0 0 8px}.sub{color:#596579;line-height:1.7}
+.card{background:#fff;border:1px solid #e2e7f0;border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 4px 18px #1b2b4a0a}
+h2{font-size:18px;margin:0 0 14px}.field{margin:12px 0}.field label,.small-label{display:block;font-weight:650;font-size:14px;margin-bottom:7px}
+input[type=text],input[type=file],input[type=number],select{width:100%;padding:11px 12px;border:1px solid #cdd5e2;border-radius:10px;font:inherit;background:#fff}
+.timegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.timegrid label{font-size:12px;color:#58657a;display:block;margin-bottom:5px}.timegrid input{text-align:center;padding:10px 4px}
+.hint{font-size:13px;color:#657187;line-height:1.6}.choices{display:grid;gap:10px}.choice{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid #dce2ed;border-radius:12px;cursor:pointer}.choice input{margin-top:5px}.choice strong{display:block;margin-bottom:3px}.choice span{font-size:13px;color:#657187;line-height:1.5}
+button{border:0;border-radius:11px;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer;background:#235de5;color:white;width:100%}button:disabled{opacity:.55;cursor:not-allowed}
+.secondary{background:#eef2ff;color:#2348a5;margin-top:10px}.progress{height:10px;background:#e7ebf3;border-radius:99px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:#235de5;transition:width .25s}
+.status{white-space:pre-wrap;line-height:1.6;font-size:14px;margin-top:10px}.preview{background:#101827;color:#dce7f7;padding:12px;border-radius:10px;white-space:pre-wrap;overflow:auto;font:12px/1.6 ui-monospace,monospace;max-height:250px}
+.inline{display:flex;gap:10px;align-items:center}.inline input[type=checkbox]{width:18px;height:18px}.hidden{display:none}
+footer{font-size:12px;color:#758096;text-align:center;padding:15px}
+@media(max-width:520px){body{padding:12px}.card{padding:14px}.timegrid{gap:6px}.timegrid input{font-size:14px}}
+</style>
 </head>
 <body>
-<main>
-  <h1>မြန်မာ SRT Translator</h1>
-  <div class="muted">Gemini AI · SRT Upload · မြန်မာဘာသာပြန် · Download</div>
+<div class="wrap">
+<header>
+<h1>မြန်မာ SRT ဘာသာပြန်စနစ်</h1>
+<div class="sub">SRT ဖိုင်တင်ပါ၊ ဘာသာပြန်မယ့်အချိန်အပိုင်းအခြားကို ရွေးပါ။ မီလီစက္ကန့်အထိ သတ်မှတ်နိုင်ပြီး ထုတ်ယူမယ့် SRT ရဲ့ အချိန်ကို မူရင်းအတိုင်းထားနိုင်သလို 00:00:00,000 ကနေ ပြန်စနိုင်ပါတယ်။</div>
+</header>
 
-  <section class="panel">
-    <label for="file">၁။ SRT ဖိုင်ရွေးပါ</label>
-    <input id="file" type="file" accept=".srt,text/plain">
-    <div id="fileInfo" class="muted"></div>
+<section class="card">
+<h2>၁။ ဖိုင်နဲ့ Worker သတ်မှတ်ရန်</h2>
+<div class="field"><label for="srtFile">SRT ဖိုင်</label><input id="srtFile" type="file" accept=".srt,text/plain"></div>
+<div class="field"><label for="workerUrl">Cloudflare Worker URL</label><input id="workerUrl" type="text" placeholder="https://your-worker.workers.dev"></div>
+<p class="hint">Worker URL ကို တစ်ကြိမ်ထည့်ပြီး နောက်တစ်ကြိမ်လည်း အသုံးပြုနိုင်ပါတယ်။ API Key ကို ဒီစာမျက်နှာမှာ မထည့်ပါနဲ့။</p>
+</section>
 
-    <div style="margin-top:18px">
-      <label for="endpoint">၂။ Cloudflare Worker URL</label>
-      <input id="endpoint" type="url"
-        placeholder="https://your-worker.your-subdomain.workers.dev">
-      <p class="muted">Worker ကို Deploy လုပ်ပြီး ရရှိလာတဲ့ URL ကို ထည့်ပါ။</p>
-    </div>
+<section class="card">
+<h2>၂။ ဘယ်အချိန်ကနေ ဘယ်အချိန်အထိ ဘာသာပြန်မလဲ</h2>
+<label class="choice"><input id="wholeFile" type="checkbox" checked><div><strong>SRT ဖိုင်တစ်ခုလုံး ဘာသာပြန်မယ်</strong><span>အမှန်ခြစ်ဖြုတ်ရင် စ/ဆုံးအချိန်ကို ကိုယ်တိုင်သတ်မှတ်နိုင်ပါတယ်။</span></div></label>
+<div id="rangeFields" class="hidden">
+<div class="field">
+<div class="small-label">စမယ့်အချိန်</div>
+<div class="timegrid">
+<div><label for="sh">နာရီ</label><input id="sh" type="number" min="0" max="999" value="0"></div>
+<div><label for="sm">မိနစ်</label><input id="sm" type="number" min="0" max="59" value="0"></div>
+<div><label for="ss">စက္ကန့်</label><input id="ss" type="number" min="0" max="59" value="0"></div>
+<div><label for="sms">မီလီစက္ကန့်</label><input id="sms" type="number" min="0" max="999" value="0"></div>
+</div></div>
+<div class="field">
+<div class="small-label">ဆုံးမယ့်အချိန်</div>
+<div class="timegrid">
+<div><label for="eh">နာရီ</label><input id="eh" type="number" min="0" max="999" value="0"></div>
+<div><label for="em">မိနစ်</label><input id="em" type="number" min="0" max="59" value="12"></div>
+<div><label for="es">စက္ကန့်</label><input id="es" type="number" min="0" max="59" value="0"></div>
+<div><label for="ems">မီလီစက္ကန့်</label><input id="ems" type="number" min="0" max="999" value="0"></div>
+</div></div>
+</div>
+</section>
 
-    <button id="translate">မြန်မာဘာသာပြန်မယ်</button>
-    <div id="status" role="status" aria-live="polite"></div>
-  </section>
+<section class="card">
+<h2>၃။ ထုတ်မယ့် SRT အချိန်ပုံစံ</h2>
+<div class="choices">
+<label class="choice"><input type="radio" name="outputMode" value="reset" checked><div><strong>ရွေးထားတဲ့အပိုင်းကိုပဲ ထုတ်ပြီး 00:00:00,000 ကနေ ပြန်စမယ်</strong><span>ရွေးထားတဲ့အပိုင်းအတွင်းက subtitle တွေကိုပဲ ထုတ်ပေးမယ်။ ပထမ subtitle စချိန်ကို သုညထားပြီး အချိန်ကွာဟချက်တွေကို ထိန်းထားမယ်။</span></div></label>
+<label class="choice"><input type="radio" name="outputMode" value="original"><div><strong>မူရင်းအချိန်အတိုင်း ထုတ်မယ်</strong><span>ဖိုင်တစ်ခုလုံးကို ထုတ်ပေးမယ်။ သတ်မှတ်ထားတဲ့အပိုင်းကိုသာ ဘာသာပြန်ပြီး ကျန်စာသားတွေကို မူရင်းအတိုင်းထားမယ်။</span></div></label>
+</div>
+<p class="hint">ဖိုင်တစ်ခုလုံးဘာသာပြန်ရန် ရွေးထားလျှင် အပိုင်းရွေးချယ်မှု မလိုပါ။ “00:00:00 ကနေ ပြန်စမယ်” မုဒ်တွင် ဖိုင်တစ်ခုလုံးရွေးထားပါကလည်း ဖိုင်တစ်ခုလုံးကို သုညကနေ စတင်ချိန်ညှိပေးပါမယ်။</p>
+</section>
 
-  <section class="panel">
-    <label for="output">၃။ ဘာသာပြန်ထားသော SRT</label>
-    <textarea id="output" spellcheck="false"
-      placeholder="ဘာသာပြန်ပြီးသော SRT ကို ဒီနေရာမှာ ပြင်ဆင်နိုင်ပါတယ်။"></textarea>
-    <div class="row">
-      <button id="download" class="secondary">SRT Download</button>
-      <button id="clear" class="secondary">ရှင်းလင်းမယ်</button>
-    </div>
-  </section>
-</main>
+<section class="card">
+<h2>၄။ ဘာသာပြန်ပြီး SRT ထုတ်ရန်</h2>
+<button id="translateBtn">ဘာသာပြန်မယ်</button>
+<div class="progress"><div id="progressBar" class="bar"></div></div>
+<div id="status" class="status" role="status">SRT ဖိုင်ရွေးပြီး ဘာသာပြန်နိုင်ပါတယ်။</div>
+<button id="downloadBtn" class="secondary hidden">SRT ဖိုင်ဒေါင်းလုဒ်လုပ်ရန်</button>
+</section>
 
+<section class="card">
+<h2>Preview</h2>
+<div id="preview" class="preview">ဖိုင်တင်ပြီးမှ နမူနာကို ပြပါမယ်။</div>
+</section>
+<footer>Myanmar SRT Translator · API key ကို Cloudflare Worker Secret အဖြစ်သာ သိမ်းထားပါ။</footer>
+</div>
 <script>
-(() => {
-  "use strict";
+const $ = id => document.getElementById(id);
+let sourceText = "";
+let outputText = "";
 
-  const $ = id => document.getElementById(id);
-  let originalName = "translated.srt";
-  let sourceText = "";
-
-  function status(message, type = "") {
-    $("status").textContent = message;
-    $("status").className = type;
+$("workerUrl").value = localStorage.getItem("srtWorkerUrl") || "";
+$("wholeFile").addEventListener("change", () => {
+  $("rangeFields").classList.toggle("hidden", $("wholeFile").checked);
+});
+$("srtFile").addEventListener("change", async e => {
+  const file = e.target.files?.[0];
+  outputText = "";
+  $("downloadBtn").classList.add("hidden");
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    $("status").textContent = "ဖိုင်အရွယ်အစား 2 MB ထက်ကြီးနေပါတယ်။ ပိုသေးတဲ့ SRT ဖိုင်ကိုရွေးပါ။";
+    e.target.value = "";
+    return;
   }
-
-  $("file").addEventListener("change", async event => {
-    const file = event.target.files[0];
-    sourceText = "";
-    $("fileInfo").textContent = "";
-    $("output").value = "";
-    if (!file) return;
-
-    if (!file.name.toLowerCase().endsWith(".srt")) {
-      status("SRT ဖိုင်ကိုသာ ရွေးပေးပါ။", "bad");
-      event.target.value = "";
-      return;
+  sourceText = (await file.text()).replace(/^\uFEFF/, "");
+  $("preview").textContent = sourceText.split(/\r?\n/).slice(0, 16).join("\n");
+  $("status").textContent = `ဖိုင်တင်ပြီးပါပြီ — ${(sourceText.match(/-->/g)||[]).length} subtitle ခန့်။`;
+});
+function timeValue(prefix) {
+  const n = id => Math.max(0, Number($(id).value || 0));
+  const h=n(prefix+"h"), m=n(prefix+"m"), s=n(prefix+"s"), ms=n(prefix+"ms");
+  if (m>59 || s>59 || ms>999) throw new Error("မိနစ်/စက္ကန့်ကို 0–59၊ မီလီစက္ကန့်ကို 0–999 အတွင်း ထည့်ပါ။");
+  return ((h*3600+m*60+s)*1000+ms);
+}
+function selectedMode(){ return document.querySelector('input[name="outputMode"]:checked').value; }
+$("translateBtn").addEventListener("click", async () => {
+  if (!sourceText) { $("status").textContent = "အရင်ဆုံး SRT ဖိုင်ရွေးပါ။"; return; }
+  const endpoint = $("workerUrl").value.trim().replace(/\/+$/, "");
+  if (!/^https:\/\/.+/.test(endpoint)) { $("status").textContent = "Cloudflare Worker URL ကို https:// နဲ့စပြီး ထည့်ပါ။"; return; }
+  let startMs = 0, endMs = null;
+  try {
+    if (!$("wholeFile").checked) {
+      startMs = timeValue("s");
+      endMs = timeValue("e");
+      if (endMs <= startMs) throw new Error("ဆုံးမယ့်အချိန်က စမယ့်အချိန်ထက် နောက်ကျရပါမယ်။");
     }
-    if (file.size > 500 * 1024) {
-      status("ဖိုင်အရွယ်အစား 500 KB ထက် မကျော်ရပါ။", "bad");
-      event.target.value = "";
-      return;
-    }
-
-    sourceText = (await file.text()).replace(/^\uFEFF/, "");
-    originalName = file.name.replace(/\.srt$/i, "") + "_my.srt";
-    $("fileInfo").textContent =
-      file.name + " · " + Math.ceil(file.size / 1024) + " KB";
-    status("ဖိုင်ဖတ်ပြီးပါပြီ။ ဘာသာပြန်နိုင်ပါပြီ။", "good");
-  });
-
-  $("translate").addEventListener("click", async () => {
-    const endpoint = $("endpoint").value.trim().replace(/\/+$/, "");
-
-    if (!sourceText) {
-      status("SRT ဖိုင်ကို အရင်ရွေးပါ။", "bad");
-      return;
-    }
-    if (!/^https:\/\/[^/]+$/.test(endpoint)) {
-      status("Cloudflare Worker ရဲ့ HTTPS URL အပြည့်အစုံ ထည့်ပါ။", "bad");
-      return;
-    }
-
-    const button = $("translate");
-    button.disabled = true;
-    $("download").disabled = true;
-    status("Gemini က ဘာသာပြန်နေပါတယ်။ ခဏစောင့်ပါ...");
-
-    try {
-      const response = await fetch(endpoint + "/translate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ srt: sourceText })
-      });
-
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) {
-        throw new Error(data.error || "Server error: " + response.status);
-      }
-      if (typeof data.srt !== "string" || !data.srt.trim()) {
-        throw new Error("ဘာသာပြန်ရလဒ် မရရှိပါ။");
-      }
-
-      $("output").value = data.srt;
-      status("ဘာသာပြန်ပြီးပါပြီ။ Subtitle အရေအတွက်: " +
-        (data.count ?? "—") + "\nရလဒ်ကို စစ်ဆေးပြီး Download လုပ်နိုင်ပါတယ်။", "good");
-    } catch (error) {
-      status("အမှား: " + error.message, "bad");
-    } finally {
-      button.disabled = false;
-      $("download").disabled = false;
-    }
-  });
-
-  $("download").addEventListener("click", () => {
-    const text = $("output").value;
-    if (!text.trim()) {
-      status("Download လုပ်ရန် ရလဒ်မရှိသေးပါ။", "bad");
-      return;
-    }
-    const blob = new Blob(["\uFEFF", text], {
-      type: "application/x-subrip;charset=utf-8"
+  } catch (err) { $("status").textContent = err.message; return; }
+  const mode = selectedMode();
+  localStorage.setItem("srtWorkerUrl", endpoint);
+  $("translateBtn").disabled = true;
+  $("downloadBtn").classList.add("hidden");
+  $("progressBar").style.width = "8%";
+  $("status").textContent = "ဘာသာပြန်နေပါတယ်။ ဖိုင်အရွယ်အစားပေါ်မူတည်ပြီး အချိန်ယူနိုင်ပါတယ်။";
+  let fakeProgress = 8;
+  const progressTimer = setInterval(() => {
+    fakeProgress = Math.min(92, fakeProgress + Math.max(0.3, (92-fakeProgress)*0.04));
+    $("progressBar").style.width = fakeProgress + "%";
+  }, 700);
+  try {
+    const response = await fetch(endpoint + "/translate", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({srt: sourceText, startMs, endMs, wholeFile: $("wholeFile").checked, outputMode: mode})
     });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = originalName;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  });
-
-  $("clear").addEventListener("click", () => {
-    sourceText = "";
-    $("file").value = "";
-    $("fileInfo").textContent = "";
-    $("output").value = "";
-    status("");
-  });
-})();
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `Worker error (${response.status})`);
+    if (!data.srt) throw new Error("Worker က SRT ဖိုင်ပြန်မပေးနိုင်ပါ။");
+    outputText = data.srt;
+    $("preview").textContent = outputText.split(/\r?\n/).slice(0, 24).join("\n");
+    $("progressBar").style.width = "100%";
+    $("status").textContent = `ပြီးပါပြီ။ ဘာသာပြန်ထားသော subtitle: ${data.translatedCount ?? data.count ?? "—"} ခု။ ထုတ်ထားသော subtitle စုစုပေါင်း: ${data.count ?? "—"} ခု။`;
+    $("downloadBtn").classList.remove("hidden");
+  } catch (err) {
+    $("status").textContent = "မအောင်မြင်ပါ — " + (err.message || "အမှားတစ်ခုဖြစ်နေပါတယ်။");
+    $("progressBar").style.width = "0%";
+  } finally {
+    clearInterval(progressTimer);
+    $("translateBtn").disabled = false;
+  }
+});
+$("downloadBtn").addEventListener("click", () => {
+  if (!outputText) return;
+  const blob = new Blob(["\uFEFF", outputText], {type:"application/x-subrip;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "myanmar-translated.srt";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+});
 </script>
 </body>
 </html>
